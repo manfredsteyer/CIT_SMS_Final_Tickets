@@ -11,10 +11,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity()
+@JsonIdentityInfo(property = "eventId", generator = ObjectIdGenerators.PropertyGenerator.class)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Event {
 
-    private @GeneratedValue @Id Long eventId;
+    private @Id Long eventId;
     private String title;
     
     private Date start;
@@ -35,7 +41,7 @@ public class Event {
         this.end = end;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = CascadeType.ALL)
     private Set<TicketType> ticketTypes = new HashSet<>();
 
     public void addTicketType(TicketType ticketType) {
@@ -121,7 +127,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event [eventId=" + eventId + ", from=" + start + ", title=" + title + ", to=" + end + "]";
+        return "Event [eventId=" + eventId + ", from=" + start + ", title=" + title + ", to=" + end + ", ticket_types=" + this.ticketTypes + "]";
     }
 
 }

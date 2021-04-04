@@ -4,10 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(indexes= {
+    @Index(columnList = "ticket_id", unique = true)
+})
 public class TicketHolder {
     private @Id @GeneratedValue Long ticketHolderId;
 

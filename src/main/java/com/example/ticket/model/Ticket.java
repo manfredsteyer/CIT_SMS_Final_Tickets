@@ -12,17 +12,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
+@JsonIdentityInfo(property = "ticketId", generator = ObjectIdGenerators.PropertyGenerator.class)
 public class Ticket {
 
     private @Id @GeneratedValue Long ticketId;
-
-    @Column(name = "ticketType_id",insertable = false, updatable = false)
+    @Column(name = "ticketType_id")
     private Long ticketTypeId;
     private Date purchaseDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ticketType_id")
+    @JoinColumn(name = "ticketType_id", insertable = false, updatable = false)
     private TicketType ticketType;
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "ticket", cascade = CascadeType.ALL)
@@ -31,8 +34,8 @@ public class Ticket {
     public Ticket() { }
 
     public Ticket(Date purchaseDate, TicketType ticketType) {
-        this.purchaseDate = purchaseDate;
-        this.ticketType = ticketType;
+        this.setPurchaseDate(purchaseDate);
+        this.setTicketType(ticketType);
     }
     
     public Long getTicketId() {
@@ -109,10 +112,6 @@ public class Ticket {
     }
     public void setTicketType(TicketType ticketType) {
         this.ticketType = ticketType;
+        this.ticketTypeId = ticketType.getTicketTypeId();
     }
-
-
-
-
-
 }
