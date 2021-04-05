@@ -13,7 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.example.ticket.utils.JpaHelper;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
+@JsonIdentityInfo(property = "ticketTypeId", generator = ObjectIdGenerators.PropertyGenerator.class)
 public class TicketType {
 
     private @Id @GeneratedValue Long ticketTypeId;
@@ -70,7 +75,7 @@ public class TicketType {
     }
     
     public Set<Ticket> getTickets() {
-        return tickets;
+        return JpaHelper.unwrap(this.tickets);
     }
     public void setTickets(Set<Ticket> tickets) {
         this.tickets = tickets;

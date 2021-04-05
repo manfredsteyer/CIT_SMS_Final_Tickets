@@ -16,14 +16,13 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@JsonIdentityInfo(property = "ticketId", generator = ObjectIdGenerators.PropertyGenerator.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class)
 public class Ticket {
 
     private @Id @GeneratedValue Long ticketId;
     @Column(name = "ticketType_id")
     private Long ticketTypeId;
     private Date purchaseDate;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ticketType_id", insertable = false, updatable = false)
     private TicketType ticketType;
@@ -62,7 +61,9 @@ public class Ticket {
     }
     public void setHolder(TicketHolder holder) {
         this.holder = holder;
-        holder.setTicket(this);
+        if (holder != null) {
+            holder.setTicket(this);
+        }
     }
 
     @Override
@@ -102,16 +103,20 @@ public class Ticket {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "Ticket [purchaseDate=" + purchaseDate + ", ticketId=" + ticketId + ", ticketTypeId=" + ticketTypeId
-                + "]";
-    }
     public TicketType getTicketType() {
         return ticketType;
     }
     public void setTicketType(TicketType ticketType) {
         this.ticketType = ticketType;
-        this.ticketTypeId = ticketType.getTicketTypeId();
+        if (ticketType != null) {
+            this.ticketTypeId = ticketType.getTicketTypeId();
+        }
     }
+
+    @Override
+    public String toString() {
+        return "Ticket [purchaseDate=" + purchaseDate + ", ticketId=" + ticketId + ", ticketTypeId=" + ticketTypeId
+                + "]";
+    }
+
 }

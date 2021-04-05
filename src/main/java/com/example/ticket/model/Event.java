@@ -7,17 +7,15 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.example.ticket.utils.JpaHelper;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity()
 @JsonIdentityInfo(property = "eventId", generator = ObjectIdGenerators.PropertyGenerator.class)
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Event {
 
     private @Id Long eventId;
@@ -76,7 +74,8 @@ public class Event {
     }
 
     public Set<TicketType> getTicketTypes() {
-        return ticketTypes;
+        // return JpaHelper.unwrap(this.ticketTypes);
+        return this.ticketTypes;
     }
     public void setTicketTypes(Set<TicketType> ticketTypes) {
         this.ticketTypes = ticketTypes;

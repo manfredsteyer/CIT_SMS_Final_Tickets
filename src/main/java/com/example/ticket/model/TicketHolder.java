@@ -9,10 +9,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(indexes= {
     @Index(columnList = "ticket_id", unique = true)
 })
+@JsonIdentityInfo(generator = ObjectIdGenerators.UUIDGenerator.class)
 public class TicketHolder {
     private @Id @GeneratedValue Long ticketHolderId;
 
