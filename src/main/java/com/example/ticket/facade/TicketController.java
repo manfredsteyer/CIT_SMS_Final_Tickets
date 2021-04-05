@@ -5,8 +5,10 @@ import java.util.Optional;
 import com.example.ticket.model.Ticket;
 import com.example.ticket.model.TicketRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +21,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/ticket")
 public class TicketController {
    
-    TicketRepository repo;
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    private TicketRepository repo;
 
     TicketController(TicketRepository repo) {
         this.repo = repo;
@@ -27,6 +32,7 @@ public class TicketController {
 
     @GetMapping("{id}")
     public Optional<Ticket> Get(@PathVariable long id) {
+        kafkaTemplate.send("ticketBooked", String.format("Hello World, Get Ticket(%d)", id));
         return repo.findById(id);
     }
 
